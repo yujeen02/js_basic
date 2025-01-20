@@ -1,16 +1,141 @@
-#main-wrap {
+/* 전체 배경 및 기본 스타일 */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa; /* 연한 블루-그레이 배경 */
+  color: #333; /* 다크 그레이 텍스트 */
+  margin: 0;
+  padding: 0;
   justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
+
+/* 메인 컨테이너 */
+#main-wrap {
+  width: 90%;
+  max-width: 1000px;
+  margin: 30px auto;
+  background-color: #ffffff; /* 화이트 배경 */
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center; /* 텍스트를 중앙 정렬 */
+}
+
+/* 테이블 스타일 */
 table {
-  border: 1px solid;
-  text-align: center;
-  margin: auto;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center; /* 셀 텍스트 중앙 정렬 */
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333; /* 어두운 텍스트 */
 }
 
-td {
-  border: 1px solid;
+thead {
+  background-color: #4a90e2; /* 부드러운 파란색 */
+  color: #fff; /* 화이트 텍스트 */
 }
 
+thead th {
+  padding: 15px 20px;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f0f4f8; /* 연한 그레이-블루 */
+}
+
+tbody tr:hover {
+  background-color: #d9e7f3; /* 강조된 블루 톤 */
+  color: #333; /* 어두운 텍스트 유지 */
+  transition: background-color 0.3s ease;
+}
+
+td,
 th {
-  border: 1px solid;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+}
+
+tbody tr td {
+  vertical-align: middle; /* 텍스트를 수직으로 중앙 정렬 */
+}
+
+/* p 태그 스타일 */
+p {
+  background-color: #e3f2fd; /* 연한 블루 톤 배경 */
+  color: #333; /* 어두운 텍스트 */
+  padding: 20px;
+  margin: 10px auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  transition: all 0.3s ease;
+  width: 100%; /* 부모 요소의 너비를 채움 */
+  max-width: 1000px; /* 최대 너비 */
+  box-sizing: border-box; /* 패딩 포함한 너비 계산 */
+}
+
+p:hover {
+  background-color: #d0e7f9; /* 강조된 블루 배경 */
+  transform: scale(1.02);
+}
+
+/* 스크롤 추가 */
+tbody {
+  display: block;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* 모바일 반응형 */
+@media screen and (max-width: 768px) {
+  table {
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 10px 15px;
+  }
+
+  p {
+    font-size: 13px;
+    padding: 12px;
+  }
+}
+
+/* 버튼 스타일 (추가적인 상호작용) */
+button {
+  background-color: #4a90e2; /* 파란색 버튼 */
+  color: white; /* 화이트 텍스트 */
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #357ab8; /* 조금 더 진한 파란색 */
+}
+
+/* 알림 스타일 */
+.alert {
+  color: #333; /* 어두운 텍스트 */
+  font-weight: bold;
 }
