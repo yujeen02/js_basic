@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./test2.css" />
+  </head>
+  <body>
+    <div class="input-wrap">
+      <!-- input -->
+      <input
+        id="inputId"
+        oninput="myIdFunction()"
+        onclick="btnDisabled()"
+        placeholder="아이디를 입력해주세요."
+      />
+      <div id="idDuplication"></div>
+
+      <input
+        id="inputName"
+        onclick="btnDisabled()"
+        placeholder="이름을 입력해주세요."
+      />
+      <div id="nameDuplication"></div>
+
+      <input
+        type="number"
+        oninput="myAgeFunction()"
+        onclick="btnDisabled()"
+        id="inputAge"
+        placeholder="나이를 입력해주세요."
+      />
+      <div id="numberType"></div>
+
+      <input
+        id="inputCareer"
+        oninput="myCareerFunction()"
+        onclick="btnDisabled()"
+        placeholder="경력을 입력해주세요."
+      />
+      <div id="max15"></div>
+
+      <input
+        id="inputNickname"
+        oninput="myNicknameFunction()"
+        onclick="btnDisabled()"
+        placeholder="별명을 입력해주세요."
+      />
+      <div id="max2Duplication"></div>
+
+      <button class="saveBtn" disabled>저장</button>
+    </div>
+    <!-- 테이블 -->
+    <div class="main-wrap"></div>
+    <script src="./test2.js"></script>
+  </body>
+</html>
