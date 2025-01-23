@@ -33,10 +33,10 @@ function dataPrint() {
       <tr>
         <td class="inputName"><div>${item.name}</div></td>
         <td class="inputAge"><div>${item.age}</div></td>
-        <td class="inputCareer"><div class="career${item.userid}">${item.career}</div><span></span></td>
+        <td class="inputCareer"><div class="career${item.userid}">${item.career}</div><span class="span${item.userid}"></span></td>
         <td class="inputNickname"><div>${item.nickname}</div></td>
         <td>
-        <button class="btnCor" onclick="">수정</button>
+        <button class="btnCor  saveB${item.userid}" onclick="update(${item.userid})">수정</button>
         <button class="btnDel" index = ${index}>삭제</button>
         </td>
       </tr>
@@ -48,38 +48,53 @@ function dataPrint() {
   deleteBtns.forEach((deleteBtn) => {
     deleteBtn.addEventListener("click", deleteRow);
   });
-
-  const modifyBtns = document.querySelectorAll(".btnCor");
-  modifyBtns.forEach((modifyBtn) => {
-    modifyBtn.addEventListener("click", modifyRow);
-  });
 }
 
-//수정
-function modifyRow(event) {
-  const btn = event.target;
-  const li = btn.closest("tr");
+const inputChange = (id) => {
+  const inputValue = document.querySelector(`.input${id}`).value;
+  const inputSpan = document.querySelector(`.span${id}`);
 
-  const careerDiv = li.querySelector(".inputCareer div");
-  const careerSpan = li.querySelector(".inputCareer span");
-  const currentCareer = careerDiv.textContent;
-  if (btn.textContent === "수정") {
-    careerDiv.innerHTML = `<input class="newCareerInput" value="${currentCareer}" />`;
-    btn.textContent = "수정완료";
-  } else if (btn.textContent === "수정완료") {
-    const newCareerInput = document.querySelector(".newCareerInput");
-    const newCareer = newCareerInput.value;
-    if (newCareer.length < 15) {
-      careerSpan.innerText = "경력은 최소 15자 이상이어야 합니다.";
-      return;
-    }
-    careerDiv.innerHTML = newCareer;
-    careerSpan.innerText = "";
-    data_map.career = newCareer;
-    localStorage.setItem("data_map", JSON.stringify(data_map));
-    btn.textContent = "수정";
+  if (inputValue.length < 15) {
+    inputSpan.innerText = `15자리 이상 작성해 주세요.`;
+  } else {
+    inputSpan.innerText = "";
   }
-}
+};
+
+let check = false;
+
+const update = (id) => {
+  check = !check;
+
+  // 경력 div
+  const careerDiv = document.querySelector(`.career${id}`);
+
+  // 경력 value
+  const careerValue = careerDiv.textContent;
+
+  if (check) {
+    const btn = document.querySelector(`.saveB${id}`);
+    btn.textContent = "수정완료";
+    careerDiv.innerHTML = `<input oninput="inputChange(${id})" class="input${id}" value="${careerValue}" />`;
+  } else {
+    const inputValue = document.querySelector(`.input${id}`).value;
+
+    careerDiv.innerText = inputValue;
+
+    const update_data = data_map.map((item) => {
+      if (Number(item.userid) === id) {
+        return {
+          ...item,
+          career: inputValue,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    localStorage.setItem("data_map", JSON.stringify(update_data));
+  }
+};
 
 // 삭제
 function deleteRow(event) {
