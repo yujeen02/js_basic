@@ -31,9 +31,9 @@ function dataPrint() {
     .map((item, index) => {
       return `
       <tr>
-        <td class="inputName"><div>${item.name}</div></td>
-        <td class="inputAge"><div>${item.age}</div></td>
-        <td class="inputCareer"><div class="career${item.userid}">${item.career}</div><span class="span${item.userid}"></span></td>
+        <td class="inputName"><div class="name${item.userid}">${item.name}</div><span class="spanN${item.userid}"></span></td>
+        <td class="inputAge"><div class="age${item.userid}">${item.age}</div><span class="spanA${item.userid}"></span></td>
+        <td class="inputCareer"><div class="career${item.userid}">${item.career}</div><span class="spanC${item.userid}"></span></td>
         <td class="inputNickname"><div>${item.nickname}</div></td>
         <td>
         <button class="btnCor  saveB${item.userid}" onclick="update(${item.userid})">수정</button>
@@ -50,49 +50,116 @@ function dataPrint() {
   });
 }
 
-const inputChange = (id) => {
-  const inputValue = document.querySelector(`.input${id}`).value;
-  const inputSpan = document.querySelector(`.span${id}`);
+// 커리어 글자수 유효성
+const inputCareerChange = (id) => {
+  const inputCValue = document.querySelector(`.inputC${id}`).value;
+  const inputCSpan = document.querySelector(`.spanC${id}`);
 
-  if (inputValue.length < 15) {
-    inputSpan.innerText = `15자리 이상 작성해 주세요.`;
+  if (inputCValue.trim() === "") {
+    inputCSpan.innerText = "내용을 채워주세요.";
+  } else if (inputCValue.length < 15) {
+    inputCSpan.innerText = "15자리 이상 작성해 주세요.";
   } else {
-    inputSpan.innerText = "";
+    inputCSpan.innerText = "";
   }
+};
+
+// 나이 제한 유효성
+const inputAgeChange = (id) => {
+  const inputAValue = document.querySelector(`.inputA${id}`).value;
+  const inputASpan = document.querySelector(`.spanA${id}`);
+  if (inputAValue.trim() === "") {
+    inputASpan.innerText = "내용을 채워주세요.";
+  } else if (inputAValue > 150) {
+    inputASpan.innerText = "150살 이상은 어려워요.";
+  } else {
+    inputASpan.innerText = "";
+  }
+};
+
+// 이름 글자수 유효성
+const inputNameChange = (id) => {
+  const inputNValue = document.querySelector(`.inputN${id}`).value;
+  const inputNSpan = document.querySelector(`.spanN${id}`);
+  if (inputNValue.trim() === "") {
+    inputNSpan.innerText = "내용을 채워주세요.";
+  } else {
+    inputASpan.innerText = "";
+  }
+};
+
+// 에러 지우기
+const clearError = (id) => {
+  const inputCSpan = document.querySelector(`.spanC${id}`);
+  const inputNSpan = document.querySelector(`.spanN${id}`);
+  const inputASpan = document.querySelector(`.spanA${id}`);
+
+  inputCSpan.innerText = "";
+  inputNSpan.innerText = "";
+  inputASpan.innerText = "";
 };
 
 let check = false;
 
+//수정
 const update = (id) => {
   check = !check;
 
-  // 경력 div
+  // 경력 이름 나이 div
   const careerDiv = document.querySelector(`.career${id}`);
+  const nameDiv = document.querySelector(`.name${id}`);
+  const ageDiv = document.querySelector(`.age${id}`);
 
-  // 경력 value
+  // 경력 이름 나이 value
   const careerValue = careerDiv.textContent;
+  const nameValue = nameDiv.textContent;
+  const ageValue = ageDiv.textContent;
+
+  // 버튼
+  const btn = document.querySelector(`.saveB${id}`);
 
   if (check) {
-    const btn = document.querySelector(`.saveB${id}`);
+    careerDiv.innerHTML = `<input oninput="inputCareerChange(${id})" class="inputC${id}" value="${careerValue}" />`;
+    nameDiv.innerHTML = `<input oninput="inputNameChange(${id})" class="inputN${id}" value="${nameValue}" />`;
+    ageDiv.innerHTML = `<input oninput="inputAgeChange(${id})" class="inputA${id}" value="${ageValue}" />`;
     btn.textContent = "수정완료";
-    careerDiv.innerHTML = `<input oninput="inputChange(${id})" class="input${id}" value="${careerValue}" />`;
   } else {
-    const inputValue = document.querySelector(`.input${id}`).value;
+    const inputCValue = document.querySelector(`.inputC${id}`).value;
+    const inputNValue = document.querySelector(`.inputN${id}`).value;
+    const inputAValue = document.querySelector(`.inputA${id}`).value;
 
-    careerDiv.innerText = inputValue;
+    inputCareerChange(id);
+    inputNameChange(id);
+    inputAgeChange(id);
+
+    const inputCSpan = document.querySelector(`.spanC${id}`);
+    const inputASpan = document.querySelector(`.spanA${id}`);
+    const inputNSpan = document.querySelector(`.spanN${id}`);
+
+    if (inputCSpan.innerText || inputASpan.innerText || inputNSpan.innerText) {
+      return;
+    }
+
+    careerDiv.innerText = inputCValue;
+    nameDiv.innerText = inputNValue;
+    ageDiv.innerText = inputAValue;
+
+    btn.textContent = "수정";
 
     const update_data = data_map.map((item) => {
       if (Number(item.userid) === id) {
         return {
           ...item,
-          career: inputValue,
+          career: inputCValue,
+          name: inputNValue,
+          age: inputAValue,
         };
       } else {
         return item;
       }
     });
-
     localStorage.setItem("data_map", JSON.stringify(update_data));
+    clearErrorMessages(id);
   }
 };
 
