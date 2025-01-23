@@ -24,16 +24,6 @@ tableWrap.innerHTML = `
     <tbody class="tBody"></tbody>
 </table> `;
 
-// 삭제
-function deleteRow(event) {
-  const btn = event.target;
-  const li = btn.closest("tr");
-  const nameCheck = li.querySelector(".inputName div").innerText;
-  data_map = data_map.filter((e) => e.name !== nameCheck);
-  localStorage.setItem("data_map", JSON.stringify(data_map));
-  li.remove();
-}
-
 // 테이블 바디 생성 함수
 function dataPrint() {
   const tBBody = document.querySelector(".tBody");
@@ -43,7 +33,7 @@ function dataPrint() {
       <tr>
         <td class="inputName"><div>${item.name}</div></td>
         <td class="inputAge"><div>${item.age}</div></td>
-        <td class="inputCareer"><div>${item.career}</div></td>
+        <td class="inputCareer"><div class="career${item.userid}">${item.career}</div><span></span></td>
         <td class="inputNickname"><div>${item.nickname}</div></td>
         <td>
         <button class="btnCor" onclick="">수정</button>
@@ -58,6 +48,47 @@ function dataPrint() {
   deleteBtns.forEach((deleteBtn) => {
     deleteBtn.addEventListener("click", deleteRow);
   });
+
+  const modifyBtns = document.querySelectorAll(".btnCor");
+  modifyBtns.forEach((modifyBtn) => {
+    modifyBtn.addEventListener("click", modifyRow);
+  });
+}
+
+//수정
+function modifyRow(event) {
+  const btn = event.target;
+  const li = btn.closest("tr");
+
+  const careerDiv = li.querySelector(".inputCareer div");
+  const careerSpan = li.querySelector(".inputCareer span");
+  const currentCareer = careerDiv.textContent;
+  if (btn.textContent === "수정") {
+    careerDiv.innerHTML = `<input class="newCareerInput" value="${currentCareer}" />`;
+    btn.textContent = "수정완료";
+  } else if (btn.textContent === "수정완료") {
+    const newCareerInput = document.querySelector(".newCareerInput");
+    const newCareer = newCareerInput.value;
+    if (newCareer.length < 15) {
+      careerSpan.innerText = "경력은 최소 15자 이상이어야 합니다.";
+      return;
+    }
+    careerDiv.innerHTML = newCareer;
+    careerSpan.innerText = "";
+    data_map.career = newCareer;
+    localStorage.setItem("data_map", JSON.stringify(data_map));
+    btn.textContent = "수정";
+  }
+}
+
+// 삭제
+function deleteRow(event) {
+  const btn = event.target;
+  const li = btn.closest("tr");
+  const nameCheck = li.querySelector(".inputName div").innerText;
+  data_map = data_map.filter((e) => e.name !== nameCheck);
+  localStorage.setItem("data_map", JSON.stringify(data_map));
+  li.remove();
 }
 
 let id_check = false;
