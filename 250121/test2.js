@@ -24,6 +24,16 @@ tableWrap.innerHTML = `
     <tbody class="tBody"></tbody>
 </table> `;
 
+// 삭제
+function deleteRow(event) {
+  const btn = event.target;
+  const li = btn.closest("tr");
+  const nameCheck = li.querySelector(".inputName div").innerText;
+  data_map = data_map.filter((e) => e.name !== nameCheck);
+  localStorage.setItem("data_map", JSON.stringify(data_map));
+  li.remove();
+}
+
 // 테이블 바디 생성 함수
 function dataPrint() {
   const tBBody = document.querySelector(".tBody");
@@ -31,12 +41,12 @@ function dataPrint() {
     .map((item, index) => {
       return `
       <tr>
-        <td>${item.name}</td>
-        <td>${item.age}</td>
-        <td>${item.career}</td>
-        <td>${item.nickname}</td>
+        <td class="inputName"><div>${item.name}</div></td>
+        <td class="inputAge"><div>${item.age}</div></td>
+        <td class="inputCareer"><div>${item.career}</div></td>
+        <td class="inputNickname"><div>${item.nickname}</div></td>
         <td>
-        <button class="btnCor" index = ${index}>수정</button>
+        <button class="btnCor" onclick="">수정</button>
         <button class="btnDel" index = ${index}>삭제</button>
         </td>
       </tr>
@@ -45,19 +55,11 @@ function dataPrint() {
     .join("");
 
   const deleteBtns = document.querySelectorAll(".btnDel");
-  deleteBtns.forEach((deleteBtn, index) => {
-    deleteBtn.addEventListener("click", function () {
-      const deletedData = data_map.toSpliced(index, 1);
-      console.log(deletedData);
-      const deletedArr = JSON.stringify([...deletedData]);
-      localStorage.setItem(`${index}`, deletedArr);
-      console.log(deletedArr);
-
-      window.location.reload(); // 창 새로고침.
-      dataPrint();
-    });
+  deleteBtns.forEach((deleteBtn) => {
+    deleteBtn.addEventListener("click", deleteRow);
   });
 }
+
 let id_check = false;
 let age_check = false;
 let nickname_check = false;
@@ -85,7 +87,7 @@ function myIdFunction() {
   if (isduplication) {
     userIdElement.innerText = "아이디중복";
   } else {
-    userIdElement.innerText = Id;
+    userIdElement.innerText = "";
     id_check = true;
   }
   btnDisabled();
@@ -104,7 +106,7 @@ function myNicknameFunction() {
   } else if (Nickname.length < 2) {
     userNicknameElement.innerText = "2자 이상 입력해야 해요";
   } else {
-    userNicknameElement.innerText = Nickname;
+    userNicknameElement.innerText = "";
     nickname_check = true;
   }
   btnDisabled();
@@ -117,7 +119,7 @@ function myAgeFunction() {
   if (Age > 150) {
     userNumberElement.innerText = "151살 이상은 안돼요";
   } else {
-    userNumberElement.innerText = Age;
+    userNumberElement.innerText = "";
     age_check = true;
   }
   btnDisabled();
@@ -131,7 +133,7 @@ function myCareerFunction() {
   if (Career.length < 15) {
     userCareerElement.innerText = "15자 이상 입력해야 해요";
   } else {
-    userCareerElement.innerText = Career;
+    userCareerElement.innerText = "";
     career_check = true;
   }
   btnDisabled();
@@ -159,6 +161,15 @@ document.addEventListener("DOMContentLoaded", function () {
       AgeElement.value = "";
       CareerElement.value = "";
       NicknameElement.value = "";
+
+      // 상태 변수 초기화
+      id_check = false;
+      age_check = false;
+      nickname_check = false;
+      career_check = false;
+
+      // 버튼 비활성화
+      btnDisabled();
     });
   }
   dataPrint();
