@@ -37,7 +37,7 @@ function dataPrint() {
         <td class="inputNickname"><div>${item.nickname}</div></td>
         <td>
         <button class="btnCor  saveB${item.userid}" onclick="update(${item.userid})">수정</button>
-        <button class="btnDel" index = ${index}>삭제</button>
+        <button class="btnDel  saveD${item.userid}" onclick="deleteCon(${item.userid})"" >삭제</button>
         </td>
       </tr>
       `;
@@ -84,7 +84,7 @@ const inputNameChange = (id) => {
   if (inputNValue.trim() === "") {
     inputNSpan.innerText = "내용을 채워주세요.";
   } else {
-    inputASpan.innerText = "";
+    inputNSpan.innerText = "";
   }
 };
 
@@ -159,7 +159,6 @@ const update = (id) => {
       }
     });
     localStorage.setItem("data_map", JSON.stringify(update_data));
-    clearErrorMessages(id);
   }
 };
 
